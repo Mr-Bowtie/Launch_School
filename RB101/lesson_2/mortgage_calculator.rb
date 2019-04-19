@@ -60,13 +60,13 @@ end
 
 def valid_term?(input)
   (integer?(input) || float?(input)) && input.to_f > 0 &&
-  valid_increments?(input)
+    valid_increments?(input)
 end
 
 def valid_increments?(input)
   return true if integer?(input)
   /^\d*\.25$/.match(input) || /^\d*\.5$/.match(input) ||
-  /^\d*\.50$/.match(input) ||/^\d*\.75$/.match(input)
+    /^\d*\.50$/.match(input) || /^\d*\.75$/.match(input)
 end
 
 def calculate_payment(loan, apr, term)
