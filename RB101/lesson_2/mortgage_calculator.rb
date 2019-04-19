@@ -1,5 +1,8 @@
+require 'yaml'
+MESSAGES = YAML.load_file("mortgage_calc_messages.yml")
+
 def prompt(message)
-  puts "-> #{message}"
+  puts "-> #{MESSAGES[message]}"
 end
 
 def integer?(num)
@@ -11,41 +14,59 @@ def float?(num)
 end
 
 def grab_loan
-  prompt 'How much would you like to borrow?'
+  prompt 'get_loan'
   loop do
     loan_amount = gets.chomp
-    if integer?(loan_amount) && loan_amount.to_i > 0
+    if valid_loan?(loan_amount)
       return loan_amount.to_i
     else
-      prompt "Invalid input: please enter a positive whole number "
+      prompt 'invalid_loan'
     end
   end
+end
+
+def valid_loan?(input)
+  integer?(input) && input.to_i > 0
 end
 
 def grab_apr
-  prompt "Next, the interest rate (APR %)"
+  prompt 'get_apr'
   loop do
     apr = gets.chomp
-    if /^\d*\.?\d*$/.match(apr) && /\d+/.match(apr) && apr.to_f > 0
+    if valid_apr?(apr)
       return apr.to_f / 100
     else
-      prompt 'Please enter a valid APR (5, 23.6, etc)'
+      prompt 'invalid_apr'
     end
   end
 end
 
+def valid_apr?(input)
+  /^\d*\.?\d*$/.match(input) && /\d+/.match(input) && input.to_f > 0
+end
+
 def grab_term
-  prompt "Finally, the desired length of the loan in years, please."
+  prompt 'get_term'
   loop do
     loan_years = gets.chomp
-    if (integer?(loan_years) || float?(loan_years)) && loan_years.to_f > 0
+    if valid_term?(loan_years)
       loan_months = (loan_years.to_f * 12)
-      loan_months = (loan_months + 1).to_i if !integer?(loan_months)
       return loan_months
     else
-      prompt 'Invalid input'
+      prompt 'invalid_term'
     end
   end
+end
+
+def valid_term?(input)
+  (integer?(input) || float?(input)) && input.to_f > 0 &&
+  valid_increments?(input)
+end
+
+def valid_increments?(input)
+  return true if integer?(input)
+  /^\d*\.25$/.match(input) || /^\d*\.5$/.match(input) ||
+  /^\d*\.50$/.match(input) ||/^\d*\.75$/.match(input)
 end
 
 def calculate_payment(loan, apr, term)
@@ -54,28 +75,32 @@ def calculate_payment(loan, apr, term)
 end
 
 def show_payment(monthly_payment)
-  prompt "Your payment would be #{monthly_payment}"
+  prompt('show_payment')
+  puts "--> #{monthly_payment}"
 end
 
 def redo?
-  prompt 'Would you like to calculate another mortgage? y/n?'
+  prompt 'redo'
   loop do
-    answer = gets.chomp
-    if %(y n).include?(answer)
+    answer = gets.chomp.downcase
+    if valid_redo_answer?(answer)
       return answer == 'y'
     end
-    prompt 'invalid: y or n only'
+    prompt 'invalid_redo'
   end
 end
 
-prompt 'Welcome to the Mortgage calculator. Lets get started!'
+def valid_redo_answer?(input)
+  %(y n).include?(input)
+end
+
+prompt 'welcome'
 loop do
   loan = grab_loan
   apr = grab_apr
   term = grab_term
   monthly_payment = calculate_payment(loan, apr, term)
   show_payment(monthly_payment.truncate(2))
-
   break unless redo?
 end
-prompt 'Thank you for using the mortgage calculator! Goodbye.'
+prompt 'goodbye'
