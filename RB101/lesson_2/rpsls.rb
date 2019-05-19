@@ -7,6 +7,7 @@ WINNING_CONDITION = {
   "lizard" => ["spock", "paper"],
   "spock" => ["scissors", "rock"]
 }
+MATCH_WIN = 5
 
 def prompt(message)
   puts "-> #{message}"
@@ -26,20 +27,47 @@ def convert_abrv(input)
   end
 end
 
+def retrieve_user_choice
+  loop do
+    prompt "Choose one: #{VALID_CHOICES.join(', ')}"
+    pchoice = gets.chomp.downcase
+    if VALID_CHOICES.include?(pchoice)
+      return pchoice
+    elsif VALID_ABBREVIATION.include?(pchoice)
+      convert_abrv(pchoice)
+      return pchoice
+    else
+      prompt "Not a valid choice. You may abbreviate to r, p, sc, l, or sp"
+    end
+  end
+end
+
 def display_score(player, computer)
   prompt "Player: #{player} Computer: #{computer}"
+end
+
+def display_welcome
+  prompt "Welcome to RPSLS. First to 5 wins! "
+end
+
+def display_choices(player, computer)
+  prompt "you chose: #{player}, The computer chose: #{computer}"
+end
+
+def display_goodbye
+  prompt "Thank you for playing!"
 end
 
 def win?(first, second)
   WINNING_CONDITION[first].include?(second)
 end
 
-def result(player, computer)
-  if win?(player, computer)
-    1
-  elsif win?(computer, player)
-    2
-  end
+def player_won?(player, computer)
+  true if win?(player, computer)
+end
+
+def computer_won?(player, computer)
+  true if win?(computer, player)
 end
 
 def display_result(player, computer)
@@ -53,9 +81,9 @@ def display_result(player, computer)
 end
 
 def display_grand(player, computer)
-  if player == 5
+  if player == MATCH_WIN
     prompt "You won the match!"
-  elsif computer == 5
+  elsif computer == MATCH_WIN
     prompt "The computer won the match."
   end
 end
@@ -75,39 +103,30 @@ def valid_redo_answer?(input)
   %(y n yes no).include?(input)
 end
 
+def match_ended?(player, computer)
+  player == MATCH_WIN || computer == MATCH_WIN
+end
+
 prompt "Welcome to RPSLS. First to 5 wins! "
 loop do
   choice = ''
   player_score = 0
   comp_score = 0
-  until player_score > 4 || comp_score > 4
-    loop do
-      prompt "Choose one: #{VALID_CHOICES.join(', ')}"
-      choice = gets.chomp.downcase
-
-      if VALID_CHOICES.include?(choice)
-        break
-      elsif VALID_ABBREVIATION.include?(choice)
-        convert_abrv(choice)
-        break
-      else
-        prompt "Not a valid choice. You may abbreviate to r, p, sc, l, or sp"
-      end
-    end
-
+  until match_ended?(player_score,comp_score)
+    choice = retrieve_user_choice()
+    system('clear') || system('cls')
     computer_choice = VALID_CHOICES.sample
 
-    prompt "you chose: #{choice}, The computer chose: #{computer_choice}"
-
-    player_score += 1 if result(choice, computer_choice) == 1
-    comp_score += 1 if result(choice, computer_choice) == 2
-
+    display_choices(choice, computer_choice)
+    player_score += 1 if player_won?(choice,computer_choice)
+    comp_score += 1 if computer_won?(choice, computer_choice)
     display_result(choice, computer_choice)
     display_score(player_score, comp_score)
+
   end
 
   display_grand(player_score, comp_score)
   break unless redo?
 end
 
-prompt "Thank you for playing."
+display_goodbye()
