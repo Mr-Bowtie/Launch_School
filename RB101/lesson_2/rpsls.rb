@@ -109,16 +109,15 @@ end
 
 prompt "Welcome to RPSLS. First to 5 wins! "
 loop do
-  choice = ''
   player_score = 0
   comp_score = 0
-  until match_ended?(player_score,comp_score)
+  until match_ended?(player_score, comp_score)
     choice = retrieve_user_choice()
     system('clear') || system('cls')
     computer_choice = VALID_CHOICES.sample
 
     display_choices(choice, computer_choice)
-    player_score += 1 if player_won?(choice,computer_choice)
+    player_score += 1 if player_won?(choice, computer_choice)
     comp_score += 1 if computer_won?(choice, computer_choice)
     display_result(choice, computer_choice)
     display_score(player_score, comp_score)
