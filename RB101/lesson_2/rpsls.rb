@@ -107,7 +107,7 @@ def match_ended?(player, computer)
   player == MATCH_WIN || computer == MATCH_WIN
 end
 
-prompt "Welcome to RPSLS. First to 5 wins! "
+display_welcome
 loop do
   player_score = 0
   comp_score = 0
