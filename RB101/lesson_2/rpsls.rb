@@ -121,7 +121,6 @@ loop do
     comp_score += 1 if computer_won?(choice, computer_choice)
     display_result(choice, computer_choice)
     display_score(player_score, comp_score)
-
   end
 
   display_grand(player_score, comp_score)

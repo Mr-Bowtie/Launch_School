@@ -84,14 +84,14 @@ def redo?
   loop do
     answer = gets.chomp.downcase
     if valid_redo_answer?(answer)
-      return answer == 'y'
+      return answer == 'y' || answer == 'yes'
     end
     prompt 'invalid_redo'
   end
 end
 
 def valid_redo_answer?(input)
-  %(y n).include?(input)
+  %(y n yes no).include?(input)
 end
 
 prompt 'welcome'
