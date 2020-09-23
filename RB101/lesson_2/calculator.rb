@@ -3,20 +3,28 @@ def prompt(message)
 end
 
 def valid_number?(num)
-  num.to_i.to_s == num
+  num.to_i.to_s == num || num.to_f.to_s == num
 end
 
+def number_type_assigner(num)
+  if num.to_i.to_s == num 
+    num.to_i
+  elsif num.to_f.to_s == num
+    num.to_f
+  end 
+end  
+
 def operation_to_message(op)
-  case op
-  when '1'
-    'Adding'
-  when '2'
-    'Subtracting'
-  when '3'
-    'Multiplying'
-  else
-    'Dividing'
-  end
+  message = case op
+    when '1'
+      'Adding'
+    when '2'
+      'Subtracting'
+    when '3'
+      'Multiplying'
+    else
+      'Dividing'
+    end
 end
 
 prompt("Welcome to calculator! Enter your name:")
@@ -41,12 +49,15 @@ loop do
     number1 = gets.chomp
     prompt("invalid input") unless valid_number?(number1)
   end
+  number1 = number_type_assigner(number1)
+
   number2 = ""
   until valid_number?(number2)
     prompt("enter your second number")
     number2 = gets.chomp
     prompt("invalid input") unless valid_number?(number2)
   end
+  number2 = number_type_assigner(number2)
 
   operation_message = <<-MSG
     What operation would you like to perform?
@@ -70,13 +81,13 @@ loop do
 
   case operation
   when "1"
-    result = number1.to_i + number2.to_i
+    result = number1 + number2'
   when "2"
-    result = number1.to_i - number2.to_i
+    result = number1 - number2
   when "3"
-    result = number1.to_i * number2.to_i
+    result = number1 * number2
   when "4"
-    result = number1.to_f / number2.to_f
+    result = number1 / number2
   else
     puts "incorrect operation input"
   end
