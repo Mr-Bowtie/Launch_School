@@ -1,1 +1,7 @@
-gem 'pry'
+
+source 'https://rubygems.org'
+
+group :development do
+  gem 'rubocop', '0.85.0'
+  gem 'pry'
+end

@@ -14,7 +14,7 @@ def operation_to_message(op)
     'Subtracting'
   when '3'
     'Multiplying'
-  else 
+  else
     'Dividing'
   end
 end
@@ -27,7 +27,7 @@ loop do
 
   if name.empty?
     prompt "Invalid name"
-  else 
+  else
     break
   end
 end
@@ -48,12 +48,16 @@ loop do
     prompt("invalid input") unless valid_number?(number2)
   end
 
-  prompt("""What operation would you like to perform?
-          1 - add
-          2 - subtract
-          3 - multiply
-          4 - divide
-  """)
+  operation_message = <<-MSG
+    What operation would you like to perform?
+    1 - add
+    2 - subtract
+    3 - multiply
+    4 - divide
+    MSG
+
+  prompt(operation_message)
+
   operation = ""
   loop do
     operation = gets.chomp
@@ -61,9 +65,9 @@ loop do
       break
     else
       prompt "please choose 1, 2, 3, or 4"
-    end 
+    end
   end
-  
+
   case operation
   when "1"
     result = number1.to_i + number2.to_i
