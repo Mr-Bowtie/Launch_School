@@ -2,10 +2,16 @@ welcome: "Welcome to Calculator! Enter your name:"
 valid_name: "Invalid name"
 first_number: "Enter the first number"
 name: "Hi"
-second_number: "What's the second number?"
+second_number: "Enter the second number"
 invalid: "Invalid input"
-invalid_operator: "must choose 1, 2, 3, or 4"
+invalid_operator: "Please choose 1, 2, 3, or 4"
 result: "The result is"
-redo: "Do you want to perform another calculation? Y/n"
-thanks: "Thank you for using the Calculator!"
-operation_message: "the two numbers ... "
+redo: "Calculate again? (Y/n)"
+thanks: "Goodbye"
+operating: "the two numbers ... "
+query_operators: 'What operation would you like to perform?'
+add: '1 - add'
+subtract: '2 - subtract'
+multiply: '3 - multiply'
+divide: '4 - divide'
+    
