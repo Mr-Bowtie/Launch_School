@@ -1,11 +1,11 @@
-welcome: 'Welcome to the Mortgage Calculator. Lets get started!'
-get_loan: 'How much would you like to borrow?'
-invalid_loan: 'Invalid input: please enter a positive whole number.'
-get_apr: 'Next, the interest rate (APR %)'
-invalid_apr: 'Please enter a valid APR (5, 23.6, etc)'
-get_term: 'Finally, the desired length of the loan in years, please.'
-invalid_term: 'Invalid input. Only use quarter year increments (1.25, 5.5, 10.75)'
-show_payment: 'Your monthly payment would be: '
-redo: 'Would you like to calculate another mortgage? y/n'
-invalid_redo: 'Invalid: y or n only'
-goodbye: 'Thank you for using the mortgage calculator! Goodbye.'
+welcome: "Welcome to the Mortgage Calculator. Lets get started!"
+get_loan: "How much would you like to borrow?"
+invalid_loan: "Invalid input: please enter a positive whole number."
+get_apr: "Next, the interest rate (APR %)"
+invalid_apr: "Please enter a valid APR (5, 23.6, etc)"
+get_term: "Finally, the desired length of the loan in years, please."
+invalid_term: "Invalid input. Only use quarter year increments (1.25, 5.5, 10.75)"
+show_payment: "Your monthly payment would be:"
+redo: "Would you like to calculate another mortgage? y/n"
+invalid_redo: "Invalid: y or n only"
+goodbye: "Thank you for using the mortgage calculator! Goodbye."
