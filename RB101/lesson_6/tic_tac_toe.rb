@@ -3,6 +3,17 @@ require "pry-byebug"
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
                 [[1, 5, 9], [3, 5, 7]]
+COUPLETS = {
+  1 => [[2, 3], [4, 7], [5, 9]],
+  2 => [[1, 3], [5, 8]],
+  3 => [[1, 2], [5, 7], [6, 9]],
+  4 => [[1, 7], [5, 6]],
+  5 => [[1, 9], [2, 8], [3, 7], [4, 6]],
+  6 => [[3, 9], [4, 5]],
+  7 => [[1, 4], [8, 9], [5, 3]],
+  8 => [[2, 5], [7, 9]],
+  9 => [[1, 5], [3, 6], [7, 8]],
+}
 
 INITIAL_MARKER = " "
 PLAYER_MARKER = "X"
@@ -77,8 +88,23 @@ def player_move!(board)
   board[square] = PLAYER_MARKER
 end
 
+def threatened_square(board)
+  empty_squares(board).each do |square|
+    COUPLETS[square].each do |couplet|
+      if board.values_at(*couplet).count(PLAYER_MARKER) == 2
+        return square
+      end
+    end
+  end
+  nil
+end
+
 def computer_move!(board)
-  square = empty_squares(board).sample
+  if threatened_square(board)
+    square = threatened_square(board)
+  else
+    square = empty_squares(board).sample
+  end
   board[square] = COMPUTER_MARKER
 end
 
@@ -116,6 +142,8 @@ loop do
       display_board(board)
       break if someone_won?(board) || board_full?(board)
     end
+
+    #TODO - add in a way to display end of round message and board without program going to next loop
 
     if someone_won?(board)
       prompt "#{detect_winner(board)} won this round"
