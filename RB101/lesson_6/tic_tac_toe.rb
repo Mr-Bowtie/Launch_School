@@ -77,6 +77,22 @@ def empty_squares(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
+def place_piece!(board, participant)
+  if participant == "Player"
+    player_move!(board)
+  else
+    computer_move!(board)
+  end
+end
+
+def alternate_player(participant)
+  if participant == "Player"
+    return "Computer"
+  else
+    return "Player"
+  end
+end
+
 def player_move!(board)
   square = ""
   loop do
@@ -88,24 +104,28 @@ def player_move!(board)
   board[square] = PLAYER_MARKER
 end
 
-def threatened_square(board)
+def computer_move!(board)
+  if threatened_square(board, COMPUTER_MARKER)
+    square = threatened_square(board, COMPUTER_MARKER)
+  elsif threatened_square(board, PLAYER_MARKER)
+    square = threatened_square(board, PLAYER_MARKER)
+  elsif board[5] == " "
+    square = 5
+  else
+    square = empty_squares(board).sample
+  end
+  board[square] = COMPUTER_MARKER
+end
+
+def threatened_square(board, marker)
   empty_squares(board).each do |square|
     COUPLETS[square].each do |couplet|
-      if board.values_at(*couplet).count(PLAYER_MARKER) == 2
+      if board.values_at(*couplet).count(marker) == 2
         return square
       end
     end
   end
   nil
-end
-
-def computer_move!(board)
-  if threatened_square(board)
-    square = threatened_square(board)
-  else
-    square = empty_squares(board).sample
-  end
-  board[square] = COMPUTER_MARKER
 end
 
 def board_full?(board)
@@ -130,22 +150,29 @@ end
 loop do
   comp_score = 0
   player_score = 0
+  starting_player = ""
+  loop do
+    #TODO : break this into a standalone method
+    #! make it case insensitive
+    prompt "Who would you like to go first? (Player or Computer)"
+    starting_player = gets.chomp
+    break if (starting_player == "Player" || starting_player == "Computer")
+    prompt "invalid input: please choose either Player or Computer"
+  end
   loop do
     board = initialize_board
+    current_player = starting_player
 
     loop do
       display_board(board)
       display_score(player_score, comp_score)
-      player_move!(board)
-      break if someone_won?(board) || board_full?(board)
-      computer_move!(board)
-      display_board(board)
+      place_piece!(board, current_player)
+      current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
     end
 
-    #TODO - add in a way to display end of round message and board without program going to next loop
-
     if someone_won?(board)
+      display_board(board)
       prompt "#{detect_winner(board)} won this round"
       if detect_winner(board) == "Player"
         player_score += 1
@@ -153,8 +180,11 @@ loop do
         comp_score += 1
       end
     else
+      display_board(board)
       prompt "Round ends in a tie"
     end
+    prompt "Hit enter to play next round"
+    gets
 
     break if comp_score == 5 || player_score == 5
   end
