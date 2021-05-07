@@ -34,6 +34,17 @@ def joinor(arr, delimiter = ", ", word = "or")
   end
 end
 
+def joinor(arr, delimiter = ", ", word = "or")
+  case arr.size
+  when 0 then ""
+  when 1 then arr.first
+  when 2 then arr.join(" #{word} ")
+  else
+    arr[-1] = "#{word} #{arr.last}"
+    arr.join(delimiter)
+  end
+end
+
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
   system "clear"
@@ -58,7 +69,12 @@ end
 def initialize_board
   new_board = {}
   (1..9).each { |num| new_board[num] = INITIAL_MARKER }
-  new_board
+  new_boar[8]}  |  #{brd[9]} "
+  puts "     |     |"
+  puts ""
+end
+
+# rubocop:enable Metrics/AbcSizd
 end
 
 def display_score(player_score, comp_score)
