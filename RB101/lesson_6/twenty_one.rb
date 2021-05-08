@@ -16,7 +16,9 @@
 # DECK:
 # - 52 cards
 # - 4 each [1-10], jack, queen, king, ace
-
+require "pry"
+require "pry-byebug"
+CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10 }
 deck = []
 player_hand = []
 dealer_hand = []
@@ -27,7 +29,7 @@ def initialize_deck
     for i in 2..10
       new_deck << i.to_s
     end
-    new_deck << "Jack" << "Queen" << "King" << "Ace"
+    new_deck << "Jack" << "Queen" << "King" #<< "Ace"
   end
   new_deck
 end
@@ -45,5 +47,11 @@ def deal(player, dealer, deck)
   display_hands(player, dealer)
 end
 
+def eval_hand(hand)
+  values = hand.map { |card| CARD_VALUES[card] }
+  values.sum
+end
+
 deck = initialize_deck
 deal(player_hand, dealer_hand, deck)
+p eval_hand(player_hand)
