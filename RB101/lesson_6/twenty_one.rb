@@ -35,16 +35,22 @@ def initialize_deck
   new_deck
 end
 
-def display_hands(player, dealer)
-  puts "Dealer has: #{dealer[0]} and unknown card"
-  puts "You have: #{player[0]} and #{player[1]}"
+def display_hands(player, dealer, state = nil)
+  if state == "final"
+    prompt "Dealer had: #{dealer.join(", ")}"
+    prompt "You had: #{player.join(", ")}"
+  else
+    prompt "Dealer has: #{dealer[0]} and unknown card"
+    prompt "You have: #{player.join(", ")}"
+  end
 end
 
-def deal(player, dealer = nil, deck)
-  if dealer
-    dealer << deck.delete_at(deck.index(deck.sample))
-  end
+def deal(player, deck)
   player << deck.delete_at(deck.index(deck.sample))
+end
+
+def busted?(hand)
+  eval_hand(hand) > 21
 end
 
 #TODO: break this into two other methods - hand_values() and calc_hand()
@@ -73,32 +79,51 @@ deck = []
 player_hand = []
 dealer_hand = []
 
-deck = initialize_deck
-2.times { deal(player_hand, dealer_hand, deck) }
-display_hands(player_hand, dealer_hand)
-puts ""
-
-#TODO add delay to the steps to display the result
-#TODO make the input non case sensitive
-
-#* Players turn
 loop do
-  prompt "Hit or Stay?"
-  action = gets.chomp
-  case action
-  when "Hit"
+  system "clear"
+  deck = initialize_deck
+  2.times do
     deal(player_hand, deck)
-  when "Stay"
-    break
-  else
-    prompt "Invalid input: Either Hit or Stay"
-    next
+    deal(dealer_hand, deck)
   end
-  display_hands(player_hand, dealer_hand)
-  hand_total = eval_hand(player_hand)
-  binding.pry
-  # if hand_total > 21
-  #   prompt "You Bust"
-  #   break
-  # end
+
+  #TODO add delay to the steps to display the result
+  #* Players turn
+
+  loop do
+    display_hands(player_hand, dealer_hand)
+    puts ""
+    prompt "Hit or Stay?"
+    action = gets.chomp.downcase
+    if action == "hit"
+      system "clear"
+      deal(player_hand, deck)
+    elsif action != "hit" && action != "stay"
+      prompt "Invalid input: Either Hit or Stay"
+      next
+    end
+    break if (action == "stay") || busted?(player_hand)
+  end
+
+  if busted?(player_hand)
+    prompt "You busted, Dealer wins"
+    break
+  end
+
+  #* Dealers turn
+
+  loop do
+    break if eval_hand(dealer_hand) >= 17
+    deal(dealer_hand, deck)
+  end
+
+  if busted?(dealer_hand)
+    prompt "Dealer busted, You win!"
+    break
+  end
+  system "clear"
+  display_hands(player_hand, dealer_hand, "final")
+  prompt "Dealer: #{eval_hand(dealer_hand)}"
+  prompt "You: #{eval_hand(player_hand)}"
+  break
 end
