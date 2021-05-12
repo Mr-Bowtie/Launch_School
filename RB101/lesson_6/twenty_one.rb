@@ -1,23 +1,6 @@
-# GAME LOOP:
-#   1. initialize deck
-#   2. deal cards
-#   3. players turn
-#     - hit until bust or stay
-#     if bust, dealer wins
-#   4 dealers turn
-#     - hit until total is at least 17
-#     if bust, player wins
-#   5. compare cards
-#     - highest value wins
-#   6 play again?
-#     - yes => back to 1
-#     - no => Goodbye!
-
-# DECK:
-# - 52 cards
-# - 4 each [1-10], jack, queen, king, ace
 require "pry"
 require "pry-byebug"
+
 CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10 }
 
 def prompt(input)
@@ -67,7 +50,6 @@ def play_again?
   end
 end
 
-#TODO: break this into two other methods - hand_values() and calc_hand()
 def eval_hand(hand)
   values = hand.map do |card|
     if card == "Ace"
