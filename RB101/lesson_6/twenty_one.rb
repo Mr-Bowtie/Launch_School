@@ -53,6 +53,20 @@ def busted?(hand)
   eval_hand(hand) > 21
 end
 
+def play_again?
+  loop do
+    prompt "would you like to play another hand? (y/n)"
+    answer = gets.chomp.downcase
+    if answer == "y" || answer == "yes"
+      return true
+    elsif answer == "n" || answer == "no"
+      return false
+    else
+      prompt "I didnt quite catch that."
+    end
+  end
+end
+
 #TODO: break this into two other methods - hand_values() and calc_hand()
 def eval_hand(hand)
   values = hand.map do |card|
@@ -75,11 +89,28 @@ def eval_hand(hand)
   end
 end
 
-deck = []
-player_hand = []
-dealer_hand = []
+def calc_winner(player, dealer)
+  if eval_hand(player) > eval_hand(dealer)
+    return "You"
+  elsif eval_hand(player) < eval_hand(dealer)
+    return "The Dealer"
+  else
+    return nil
+  end
+end
+
+def display_winner(player, dealer)
+  if calc_winner(player, dealer)
+    prompt "#{calc_winner(player, dealer)} won!"
+  else
+    prompt "Round ends in a tie."
+  end
+end
 
 loop do
+  deck = []
+  player_hand = []
+  dealer_hand = []
   system "clear"
   deck = initialize_deck
   2.times do
@@ -107,7 +138,8 @@ loop do
 
   if busted?(player_hand)
     prompt "You busted, Dealer wins"
-    break
+    break unless play_again?()
+    next
   end
 
   #* Dealers turn
@@ -119,11 +151,16 @@ loop do
 
   if busted?(dealer_hand)
     prompt "Dealer busted, You win!"
-    break
+    break unless play_again?()
+    next
   end
   system "clear"
   display_hands(player_hand, dealer_hand, "final")
   prompt "Dealer: #{eval_hand(dealer_hand)}"
   prompt "You: #{eval_hand(player_hand)}"
-  break
+  display_winner(player_hand, dealer_hand)
+
+  break unless play_again?()
 end
+
+prompt "Thanks for playing 21, Goodbye!"
