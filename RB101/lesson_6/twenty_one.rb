@@ -1,5 +1,3 @@
-require "pry"
-require "pry-byebug"
 
 CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10 }
 
@@ -32,8 +30,8 @@ def deal!(player, deck)
   player << deck.delete_at(deck.index(deck.sample))
 end
 
-def busted?(hand)
-  eval_hand(hand) > 21
+def busted?(hand_total)
+  hand_total > 21
 end
 
 def play_again?
@@ -72,22 +70,29 @@ def eval_hand(hand)
   end
 end
 
-def calc_winner(player, dealer)
-  if eval_hand(player) > eval_hand(dealer)
-    "You"
-  elsif eval_hand(player) < eval_hand(dealer)
-    "The Dealer"
-  else
-    nil
-  end
+def calc_result(player, dealer)
+  if player > 21
+    :player_busted
+  elsif dealer > 21 
+    :dealer_busted
+  elsif player > dealer 
+    :player
+  elsif dealer > player 
+    :dealer
+  end 
 end
 
-def display_winner(player, dealer)
-  if calc_winner(player, dealer)
-    prompt "#{calc_winner(player, dealer)} won!"
-  else
-    prompt "Round ends in a tie."
-  end
+def display_result(player, dealer)
+  case calc_result(player, dealer)
+  when :player_busted
+    prompt "You busted, dealer wins"
+  when :dealer_busted
+    prompt "Dealer busted, You win!"
+  when :player
+    prompt "You win!"
+  when :dealer
+    prompt "Dealer wins"
+  end 
 end
 
 # TODO add in friendly messages and clear directions
@@ -102,10 +107,11 @@ loop do
     deal!(player_hand, deck)
     deal!(dealer_hand, deck)
   end
-
+ player_total = eval_hand(player_hand)
+ dealer_total = eval_hand(dealer_hand) 
   # TODO add delay to the steps to display the result
   # ? dealing "loading" animation?
-
+  
   # * Players turn
   # TODO make array of acceptable answers
   loop do
@@ -116,36 +122,38 @@ loop do
     if action == "hit" || action == "h"
       system "clear"
       deal!(player_hand, deck)
+      player_total = eval_hand(player_hand)
     elsif action != "hit" && action != "stay"
       prompt "Invalid input: Either Hit or Stay"
       next
     end
-    break if (action == "stay" || action == "s") || busted?(player_hand)
+    break if (action == "stay" || action == "s") || busted?(player_total)
   end
-  # TODO combine this with calc_winner to make a calc_result method that pipes to display_result (rework of display_winner)
-  if busted?(player_hand)
+  
+  if busted?(player_total)
     prompt "You busted, Dealer wins"
     break unless play_again?()
     next
   end
-
+  
   # * Dealers turn
-
+  
   loop do
-    break if eval_hand(dealer_hand) >= 17
+    break if dealer_total >= 17
     deal!(dealer_hand, deck)
+    dealer_total = eval_hand(dealer_hand)
   end
 
-  if busted?(dealer_hand)
+  if busted?(dealer_total)
     prompt "Dealer busted, You win!"
     break unless play_again?()
     next
   end
   system "clear"
   display_hands(player_hand, dealer_hand, "final")
-  prompt "Dealer: #{eval_hand(dealer_hand)}"
-  prompt "You: #{eval_hand(player_hand)}"
-  display_winner(player_hand, dealer_hand)
+  prompt "Dealer: #{dealer_total}"
+  prompt "You: #{player_total}"
+  display_result(player_total, dealer_total)
 
   break unless play_again?()
 end
