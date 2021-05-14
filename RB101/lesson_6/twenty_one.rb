@@ -1,5 +1,5 @@
-
-CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10 }
+require 'pry'
+CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10, "Ace" => 11 }
 
 def prompt(input)
   puts "==> #{input}"
@@ -18,8 +18,10 @@ end
 
 def display_hands(player, dealer, state = nil)
   if state == "final"
-    prompt "Dealer had: #{dealer.join(", ")}"
-    prompt "You had: #{player.join(", ")}"
+    puts "**************"
+    prompt "Dealer has: #{dealer.join(", ")}, totaling #{eval_hand(dealer)}"
+    prompt "You have: #{player.join(", ")}, totaling #{eval_hand(player)}"
+    puts "**************"
   else
     prompt "Dealer has: #{dealer[0]} and unknown card"
     prompt "You have: #{player.join(", ")}"
@@ -50,25 +52,12 @@ end
 
 # TODO refactor
 def eval_hand(hand)
-  values = hand.map do |card|
-    if card == "Ace"
-      card
-    else
-      CARD_VALUES[card]
-    end
-  end
-  values.reduce(0) do |sum, value|
-    if value == "Ace"
-      if (sum + 11) > 21
-        sum + 1
-      else
-        sum + 11
-      end
-    else
-      sum + value
-    end
-  end
+  number_of_aces = hand.count("Ace")
+  sum = hand.map {|card| CARD_VALUES[card]}.sum
+  number_of_aces.times {sum -= 10 if (sum > 21)}
+  sum
 end
+
 
 def calc_result(player, dealer)
   if player > 21
@@ -127,6 +116,7 @@ loop do
       prompt "Invalid input: Either Hit or Stay"
       next
     end
+    # binding.pry
     break if (action == "stay" || action == "s") || busted?(player_total)
   end
   
@@ -140,6 +130,7 @@ loop do
   
   loop do
     break if dealer_total >= 17
+    # binding.pry
     deal!(dealer_hand, deck)
     dealer_total = eval_hand(dealer_hand)
   end
@@ -151,8 +142,6 @@ loop do
   end
   system "clear"
   display_hands(player_hand, dealer_hand, "final")
-  prompt "Dealer: #{dealer_total}"
-  prompt "You: #{player_total}"
   display_result(player_total, dealer_total)
 
   break unless play_again?()
