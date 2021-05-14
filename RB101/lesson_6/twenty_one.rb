@@ -19,8 +19,8 @@ end
 def display_hands(player, dealer, state = nil)
   if state == "final"
     puts "**************"
-    prompt "Dealer has: #{dealer.join(", ")}, totaling #{eval_hand(dealer)}"
-    prompt "You have: #{player.join(", ")}, totaling #{eval_hand(player)}"
+    prompt "Dealer has: #{dealer.join(", ")} ==> #{eval_hand(dealer)}"
+    prompt "You have: #{player.join(", ")} ==> #{eval_hand(player)}"
     puts "**************"
   else
     prompt "Dealer has: #{dealer[0]} and unknown card"
@@ -50,7 +50,7 @@ def play_again?
   end
 end
 
-# TODO refactor
+
 def eval_hand(hand)
   number_of_aces = hand.count("Ace")
   sum = hand.map {|card| CARD_VALUES[card]}.sum
@@ -98,26 +98,24 @@ loop do
   end
  player_total = eval_hand(player_hand)
  dealer_total = eval_hand(dealer_hand) 
-  # TODO add delay to the steps to display the result
-  # ? dealing "loading" animation?
   
   # * Players turn
-  # TODO make array of acceptable answers
+  
   loop do
     display_hands(player_hand, dealer_hand)
     puts ""
     prompt "(H)it or (S)tay?"
     action = gets.chomp.downcase
-    if action == "hit" || action == "h"
+    if %(hit, h).include?(action)
       system "clear"
       deal!(player_hand, deck)
       player_total = eval_hand(player_hand)
-    elsif action != "hit" && action != "stay"
+    elsif !%(hit, stay, h, s).include?(action)
       prompt "Invalid input: Either Hit or Stay"
       next
     end
     # binding.pry
-    break if (action == "stay" || action == "s") || busted?(player_total)
+    break if %(stay, s).include?(action) || busted?(player_total)
   end
   
   if busted?(player_total)
