@@ -40,9 +40,10 @@ def play_again?
   loop do
     prompt "would you like to play another hand? (y/n)"
     answer = gets.chomp.downcase
-    if answer == "y" || answer == "yes"
+    case answer 
+    when 'y' || 'yes'
       return true
-    elsif answer == "n" || answer == "no"
+    when 'n' || 'no' 
       return false
     else
       prompt "I didnt quite catch that."
