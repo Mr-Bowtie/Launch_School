@@ -10,7 +10,7 @@ end
 def initialize_deck
   new_deck = []
   4.times do
-    for i in 2..10
+    (2..10).each do |i|
       new_deck << i.to_s
     end
     new_deck << "Jack" << "Queen" << "King" << "Ace"
@@ -28,7 +28,7 @@ def display_hands(player, dealer, state = nil)
   end
 end
 
-def deal(player, deck)
+def deal!(player, deck)
   player << deck.delete_at(deck.index(deck.sample))
 end
 
@@ -50,6 +50,7 @@ def play_again?
   end
 end
 
+# TODO refactor
 def eval_hand(hand)
   values = hand.map do |card|
     if card == "Ace"
@@ -73,11 +74,11 @@ end
 
 def calc_winner(player, dealer)
   if eval_hand(player) > eval_hand(dealer)
-    return "You"
+    "You"
   elsif eval_hand(player) < eval_hand(dealer)
-    return "The Dealer"
+    "The Dealer"
   else
-    return nil
+    nil
   end
 end
 
@@ -89,6 +90,8 @@ def display_winner(player, dealer)
   end
 end
 
+# TODO add in friendly messages and clear directions
+
 loop do
   deck = []
   player_hand = []
@@ -96,39 +99,41 @@ loop do
   system "clear"
   deck = initialize_deck
   2.times do
-    deal(player_hand, deck)
-    deal(dealer_hand, deck)
+    deal!(player_hand, deck)
+    deal!(dealer_hand, deck)
   end
 
-  #TODO add delay to the steps to display the result
-  #* Players turn
+  # TODO add delay to the steps to display the result
+  # ? dealing "loading" animation?
 
+  # * Players turn
+  # TODO make array of acceptable answers
   loop do
     display_hands(player_hand, dealer_hand)
     puts ""
-    prompt "Hit or Stay?"
+    prompt "(H)it or (S)tay?"
     action = gets.chomp.downcase
-    if action == "hit"
+    if action == "hit" || action == "h"
       system "clear"
-      deal(player_hand, deck)
+      deal!(player_hand, deck)
     elsif action != "hit" && action != "stay"
       prompt "Invalid input: Either Hit or Stay"
       next
     end
-    break if (action == "stay") || busted?(player_hand)
+    break if (action == "stay" || action == "s") || busted?(player_hand)
   end
-
+  # TODO combine this with calc_winner to make a calc_result method that pipes to display_result (rework of display_winner)
   if busted?(player_hand)
     prompt "You busted, Dealer wins"
     break unless play_again?()
     next
   end
 
-  #* Dealers turn
+  # * Dealers turn
 
   loop do
     break if eval_hand(dealer_hand) >= 17
-    deal(dealer_hand, deck)
+    deal!(dealer_hand, deck)
   end
 
   if busted?(dealer_hand)
@@ -146,3 +151,5 @@ loop do
 end
 
 prompt "Thanks for playing 21, Goodbye!"
+
+# ? maybe add a betting/scoring system tracked from round to round
