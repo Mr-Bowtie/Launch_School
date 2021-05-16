@@ -163,12 +163,14 @@ loop do
       display_grand_output(hands, totals)
       next
     end
-
+    #TODO make grand output for ultimate winner, make round output for round winners
     display_grand_output(hands, totals)
     update_hands_won(totals, hands_won)
+    #TODO add enter break for next round
     sleep(2)
     break if target_reached(hands_won)
   end
+  #TODO finish round scoring implementation
 
   break unless play_again?()
 end
