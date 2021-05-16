@@ -1,8 +1,8 @@
-require 'pry'
+require "pry"
 CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10, "Ace" => 11 }
 
 def prompt(input)
-  puts "==> #{input}"
+  puts "==|: #{input}"
 end
 
 def initialize_deck
@@ -18,10 +18,10 @@ end
 
 def display_hands(player, dealer, state = nil)
   if state == "final"
-    puts "**************"
+    puts "**********************************"
     prompt "Dealer has: #{dealer.join(", ")} ==> #{eval_hand(dealer)}"
     prompt "You have: #{player.join(", ")} ==> #{eval_hand(player)}"
-    puts "**************"
+    puts "**********************************"
   else
     prompt "Dealer has: #{dealer[0]} and unknown card"
     prompt "You have: #{player.join(", ")}"
@@ -37,39 +37,44 @@ def busted?(hand_total)
 end
 
 def play_again?
+  positive_answers = ["yes", "y"]
+  negative_answers = ["no", "n"]
   loop do
     prompt "would you like to play another hand? (y/n)"
     answer = gets.chomp.downcase
-    case answer 
-    when 'y' || 'yes'
+    if positive_answers.include?(answer)
       return true
-    when 'n' || 'no' 
+    elsif negative_answers.include?(answer)
       return false
     else
-      prompt "I didnt quite catch that."
+      prompt "It's really a yes or no question, try again"
     end
   end
 end
 
-
 def eval_hand(hand)
   number_of_aces = hand.count("Ace")
-  sum = hand.map {|card| CARD_VALUES[card]}.sum
-  number_of_aces.times {sum -= 10 if (sum > 21)}
+  sum = hand.map { |card| CARD_VALUES[card] }.sum
+  number_of_aces.times { sum -= 10 if (sum > 21) }
   sum
 end
 
+def display_grand_output(player, player_total, dealer, dealer_total, state = nil)
+  system "clear"
+  display_hands(player, dealer, state)
+  display_result(player_total, dealer_total)
+end
 
 def calc_result(player, dealer)
   if player > 21
     :player_busted
-  elsif dealer > 21 
+  elsif dealer > 21
     :dealer_busted
-  elsif player > dealer 
+  elsif player > dealer
     :player
-  elsif dealer > player 
+  elsif dealer > player
     :dealer
-  end 
+  end
 end
 
 def display_result(player, dealer)
@@ -82,7 +87,9 @@ def display_result(player, dealer)
     prompt "You win!"
   when :dealer
     prompt "Dealer wins"
-  end 
+  else
+    prompt "Round ends in tie"
+  end
 end
 
 # TODO add in friendly messages and clear directions
@@ -97,11 +104,11 @@ loop do
     deal!(player_hand, deck)
     deal!(dealer_hand, deck)
   end
- player_total = eval_hand(player_hand)
- dealer_total = eval_hand(dealer_hand) 
-  
+  player_total = eval_hand(player_hand)
+  dealer_total = eval_hand(dealer_hand)
+
   # * Players turn
-  
+
   loop do
     display_hands(player_hand, dealer_hand)
     puts ""
@@ -118,31 +125,28 @@ loop do
     # binding.pry
     break if %(stay, s).include?(action) || busted?(player_total)
   end
-  
+
   if busted?(player_total)
-    prompt "You busted, Dealer wins"
-    break unless play_again?()
+    display_grand_output(player_hand, player_total, dealer_hand, dealer_total, "final")
+    play_again?() ? next : break
     next
   end
-  
+
   # * Dealers turn
-  
+
   loop do
     break if dealer_total >= 17
-    # binding.pry
     deal!(dealer_hand, deck)
     dealer_total = eval_hand(dealer_hand)
   end
 
   if busted?(dealer_total)
-    prompt "Dealer busted, You win!"
-    break unless play_again?()
+    display_grand_output(player_hand, player_total, dealer_hand, dealer_total, "final")
+    play_again?() ? next : break
     next
   end
-  system "clear"
-  display_hands(player_hand, dealer_hand, "final")
-  display_result(player_total, dealer_total)
 
+  display_grand_output(player_hand, player_total, dealer_hand, dealer_total, "final")
   break unless play_again?()
 end
 
