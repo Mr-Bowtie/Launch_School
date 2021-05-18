@@ -10,5 +10,5 @@ def star_method(stars)
   arr
 end
 
-stars_1 = ["Sirius", "Rigel", "Vega", "Polaris", "Altair"]
+stars_1 = %w[Sirius Rigel Vega Polaris Altair]
 p star_method(stars_1)

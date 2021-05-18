@@ -18,7 +18,7 @@
 #                !<some object> - turns an object into the opposite of its boolean equivalent.
 
 #3.
-advice.gsub!("important", "urgent")
+advice.gsub!('important', 'urgent')
 
 #4.numbers.delete_at(1) will delete the element the specified index.
 #  numbers.delete(1) will delete all elements whose values match
@@ -29,13 +29,13 @@ advice.gsub!("important", "urgent")
 
 #6.
 #1.
-famous_words = "seven years ago..."
-famous_array = famous_words.split(" ")
-famous_array.unshift("Four", "score", "and")
-famous_words = famous_array.join(" ")
+famous_words = 'seven years ago...'
+famous_array = famous_words.split(' ')
+famous_array.unshift('Four', 'score', 'and')
+famous_words = famous_array.join(' ')
 #2.
-famous_words = "seven years ago..."
-prepend = "Four score and "
+famous_words = 'seven years ago...'
+prepend = 'Four score and '
 famous_words = prepend + famous_words
 
 #7 NEED TO EXPLORE FURTHER

@@ -18,27 +18,27 @@
 # attempt
 def dot_separated_ip_address?(input_string)
   loop do
-    if input_string.split(".").size == 4 
-      dot_separated_words = input_string.split(".")
+    if input_string.split('.').size == 4
+      dot_separated_words = input_string.split('.')
       break
     else
-      puts "input invalid. Please enter valid IP address."
-    end 
-  end 
-  while dot_separated_words.size > 0 do
+      puts 'input invalid. Please enter valid IP address.'
+    end
+  end
+  while dot_separated_words.size > 0
     word = dot_separated_words.pop
     next if is_an_ip_number?(word)
     return false
   end
   return true
-end 
+end
 
 # suggested solution:
 def dot_separated_ip_address?(input_string)
-  dot_separated_words = input_string.split(".")
+  dot_separated_words = input_string.split('.')
   return false unless dot_separated_words.size == 4
 
-  while dot_separated_words.size > 0 do
+  while dot_separated_words.size > 0
     word = dot_separated_words.pop
     return false unless is_an_ip_number?(word)
   end
@@ -48,5 +48,4 @@ end
 
 # gets rid of unecessary loop and if/else statment at the begininng that would be more likely be a validation methd
 # to allow the user to reenter the ip address instead of having to re-run the program. also simplifies false return
-# for evaluating ip_numbers. 
-  
+# for evaluating ip_numbers.

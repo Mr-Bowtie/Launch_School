@@ -8,14 +8,14 @@
 #puts string that many times
 
 def repeat(string, num)
-string = string.to_s
+  string = string.to_s
   if num.to_i.positive?
     num
   else
-    puts "invalid input, integer must be positive"
+    puts 'invalid input, integer must be positive'
     return
   end
-num.times {puts string}
+  num.times { puts string }
 end
 
 #repeat('hey', 3)

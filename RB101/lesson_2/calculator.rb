@@ -1,4 +1,4 @@
-require "yaml"
+require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 
 def prompt(message)
@@ -10,15 +10,16 @@ def valid_number?(num)
 end
 
 def number_type_assigner(num)
-  if num.to_i.to_s == num 
+  if num.to_i.to_s == num
     num.to_i
   elsif num.to_f.to_s == num
     num.to_f
-  end 
-end  
+  end
+end
 
 def operation_to_message(op)
-  message = case op
+  message =
+    case op
     when '1'
       'Adding'
     when '2'
@@ -46,7 +47,7 @@ end
 prompt "Hi #{name}"
 
 loop do
-  number1 = ""
+  number1 = ''
   until valid_number?(number1)
     prompt(MESSAGES['first_number'])
     number1 = gets.chomp
@@ -54,7 +55,7 @@ loop do
   end
   number1 = number_type_assigner(number1)
 
-  number2 = ""
+  number2 = ''
   until valid_number?(number2)
     prompt(MESSAGES['second_number'])
     number2 = gets.chomp
@@ -69,12 +70,11 @@ loop do
     #{MESSAGES['multiply']}
     #{MESSAGES['divide']}
   MSG
- 
 
-  operation = ""
+  operation = ''
   loop do
     operation = gets.chomp
-    if %(1 2 3 4).include?(operation)
+    if '1 2 3 4'.include?(operation)
       break
     else
       prompt(MESSAGES['invalid_operator'])
@@ -82,13 +82,13 @@ loop do
   end
 
   case operation
-  when "1"
+  when '1'
     result = number1 + number2
-  when "2"
+  when '2'
     result = number1 - number2
-  when "3"
+  when '3'
     result = number1 * number2
-  when "4"
+  when '4'
     result = number1 / number2
   else
     prompt(MESSAGES['invalid_operator'])
@@ -103,4 +103,4 @@ loop do
   break unless answer.downcase.start_with?('y')
 end
 
-prompt "#{MESSAGES["thanks"]} #{name}!"
+prompt "#{MESSAGES['thanks']} #{name}!"

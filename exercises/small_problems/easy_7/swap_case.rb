@@ -16,19 +16,23 @@ UPPERCASE_VALUES = 97..122
 LETTER_CONVERSION_VALUE = 32 #every letters ASCII is 32 away from its opposite cased counterpart
 
 def swapcase(string)
-  ordinal_array = string.chars.map(&:ord).map do |el|
-    if LOWERCASE_VALUES.include?(el)
-      (el + LETTER_CONVERSION_VALUE).chr
-    elsif UPPERCASE_VALUES.include?(el)
-      (el - LETTER_CONVERSION_VALUE).chr
-    else
-      el.chr
-    end
-  end
+  ordinal_array =
+    string
+      .chars
+      .map(&:ord)
+      .map do |el|
+        if LOWERCASE_VALUES.include?(el)
+          (el + LETTER_CONVERSION_VALUE).chr
+        elsif UPPERCASE_VALUES.include?(el)
+          (el - LETTER_CONVERSION_VALUE).chr
+        else
+          el.chr
+        end
+      end
   ordinal_array.join
 end
 
-p swapcase("CamelCase") == "cAMELcASE"
-p swapcase("Tonight on XYZ-TV") == "tONIGHT ON xyz-tv"
+p swapcase('CamelCase') == 'cAMELcASE'
+p swapcase('Tonight on XYZ-TV') == 'tONIGHT ON xyz-tv'
 
 #* oh boy did I overthink this one, could've just used upcase and downcase again just like the LS solution. just using ranges for lowercase and uppercase

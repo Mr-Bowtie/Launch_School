@@ -18,10 +18,10 @@
 
 #C:
 
-def stringy(num=0,alt=1)
+def stringy(num = 0, alt = 1)
   bin = []
   if num.to_s.to_i != num || num.negative?
-    puts "Invalid input: positive integers only"
+    puts 'Invalid input: positive integers only'
     return
   else
     num.times do |x|
@@ -37,10 +37,10 @@ def stringy(num=0,alt=1)
 end
 
 puts stringy(0)
-puts stringy()
-puts stringy(14,0)
+puts stringy
+puts stringy(14, 0)
 puts stringy(14)
 puts stringy(-1)
 puts stringy(5)
-puts stringy(6,0)
+puts stringy(6, 0)
 puts stringy('hey')

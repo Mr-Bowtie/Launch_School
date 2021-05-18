@@ -1,5 +1,5 @@
-def short_long_short(str1,str2)
+def short_long_short(str1, str2)
   str1.length > str2.length ? str2 + str1 + str2 : str1 + str2 + str1
-end 
+end
 
-puts short_long_short("abc","def")
+puts short_long_short('abc', 'def')

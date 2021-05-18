@@ -1,17 +1,17 @@
-require "yaml"
+require 'yaml'
 
 MESSAGES = YAML.load_file('mortgage_calc_messages.yml')
 
-def prompt(message, var='')
-    puts "=> #{MESSAGES[message]} #{var}"
+def prompt(message, var = '')
+  puts "=> #{MESSAGES[message]} #{var}"
 end
 
 def valid_int?(int)
-    int.to_i.to_s == int
+  int.to_i.to_s == int
 end
 
 def valid_float?(float)
-    float.to_f.to_s == float
+  float.to_f.to_s == float
 end
 
 def valid_number?(num)
@@ -23,11 +23,11 @@ def valid_term?(term)
 end
 
 def term_type_assigner(term)
-  if term.to_i.to_s == term 
+  if term.to_i.to_s == term
     term.to_i
   elsif term.to_f.to_s == term
     term.to_f
-  end 
+  end
 end
 
 def valid_redo_input?(answer)
@@ -41,13 +41,13 @@ def redo_calc
     answer = gets.chomp.downcase
     case answer
     when 'y'
-      return true  
+      return true
     when 'n'
       return false
     else
       prompt('invalid_redo')
     end
-  end 
+  end
 end
 
 def get_loan_amount
@@ -56,7 +56,7 @@ def get_loan_amount
   until valid_number?(loan_amount)
     loan_amount = gets.chomp
     prompt('invalid_loan') unless valid_number?(loan_amount)
-  end 
+  end
   loan_amount.to_i
 end
 
@@ -66,9 +66,9 @@ def get_apr
   until valid_number?(apr)
     apr = gets.chomp
     prompt('invalid_apr') unless valid_number?(apr)
-  end 
+  end
   apr.to_f
-end 
+end
 
 def get_term
   prompt('get_term')
@@ -76,22 +76,22 @@ def get_term
   until valid_term?(loan_duration)
     loan_duration = gets.chomp
     prompt('invalid_term') unless valid_term?(loan_duration)
-  end 
+  end
   term_type_assigner(loan_duration)
 end
 
 prompt('welcome')
-loop do 
-  loan_amount = get_loan_amount()
-  apr = get_apr()
-  term_years = get_term()
+loop do
+  loan_amount = get_loan_amount
+  apr = get_apr
+  term_years = get_term
   monthly_rate = (apr.to_f / 1200)
   term_months = (term_years.to_i * 12)
 
-
-  monthly_payment = loan_amount * (monthly_rate / (1 - (1 + monthly_rate)**(-term_months)))
+  monthly_payment =
+    loan_amount * (monthly_rate / (1 - (1 + monthly_rate)**(-term_months)))
 
   prompt('show_payment', monthly_payment.round(2).to_s)
-  break unless redo_calc()
-end 
+  break unless redo_calc
+end
 prompt('goodbye')

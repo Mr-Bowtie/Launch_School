@@ -2,15 +2,11 @@
 # those elements occur in the given array.
 #elements must match exactly and are case sensitive.
 #E -
-vehicles = [
-  'car', 'car', 'truck', 'car', 'SUV', 'truck',
-  'motorcycle', 'motorcycle', 'car', 'truck'
-]
+vehicles = %w[car car truck car SUV truck motorcycle motorcycle car truck]
 
-numbers = [1,2,2,3,42,5,3,1,42]
+numbers = [1, 2, 2, 3, 42, 5, 3, 1, 42]
 
-pets = ['cat', 'dog', 'Sugar', 'sugar', 'dog', 12,
-12, 'Cat']
+pets = ['cat', 'dog', 'Sugar', 'sugar', 'dog', 12, 12, 'Cat']
 
 #D - store data as a hash since there will be values associated with
 #each element.
@@ -21,13 +17,13 @@ pets = ['cat', 'dog', 'Sugar', 'sugar', 'dog', 12,
 
 #C-
 
-def count_occurences(array=[])
+def count_occurences(array = [])
   elements = {}
   array.each { |e| elements[e] = array.count(e) }
-  elements.each {|key, value| puts "#{key} => #{value}"}
+  elements.each { |key, value| puts "#{key} => #{value}" }
 end
 
 count_occurences(vehicles)
 count_occurences(numbers)
 count_occurences(pets)
-count_occurences()
+count_occurences

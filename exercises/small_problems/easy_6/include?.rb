@@ -17,6 +17,7 @@ def include?(arr, search_val)
     if el == search_val
       return true
     else
+
     end
   end
   false

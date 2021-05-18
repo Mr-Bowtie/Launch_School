@@ -4,7 +4,8 @@
 #   elsif year % 4 == 0 && !(year % 100 == 0)
 #     true
 #   else
-#     false 
+
+#     false
 #   end
 # end
 
@@ -20,33 +21,28 @@
 #     return true unless year % 100 == 0 && year % 400 != 0
 #   end
 #  false
-# end 
+
+# end
 
 # part 2
 
 def leap_year?(year)
   case year >= 1752
   when true
-    if year % 4 == 0 
-      return true unless year % 100 == 0 && year % 400 != 0
-    end
+    return true unless year % 100 == 0 && year % 400 != 0 if year % 4 == 0
     false
   when false
     year % 4 == 0 ? true : false
-  end 
-end 
-
-
-
+  end
+end
 
 puts leap_year?(2016)
 puts leap_year?(2015)
 puts leap_year?(2100)
-puts leap_year?(240000)
+puts leap_year?(240_000)
 puts leap_year?(1)
 puts leap_year?(400)
 puts leap_year?(1700)
 puts leap_year?(1752)
-
 
 #

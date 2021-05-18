@@ -9,9 +9,8 @@ result: "The result is"
 redo: "Calculate again? (Y/n)"
 thanks: "Goodbye"
 operating: "the two numbers ... "
-query_operators: 'What operation would you like to perform?'
-add: '1 - add'
-subtract: '2 - subtract'
-multiply: '3 - multiply'
-divide: '4 - divide'
-    
+query_operators: "What operation would you like to perform?"
+add: "1 - add"
+subtract: "2 - subtract"
+multiply: "3 - multiply"
+divide: "4 - divide"

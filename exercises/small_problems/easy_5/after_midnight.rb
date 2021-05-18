@@ -18,9 +18,7 @@ DAY_MINUTES = 1440
 
 def time_of_day(time)
   abs_time = (time.negative? ? -time : time)
-  while abs_time > 1440
-    abs_time -= 1440
-  end 
+  abs_time -= 1440 while abs_time > 1440
   if time.negative?
     hours = (23 - (abs_time / 60))
     minutes = (60 - (abs_time % 60))
@@ -30,7 +28,7 @@ def time_of_day(time)
   end
   hours < 10 ? hours = hours.to_s.prepend('0') : hours = hours.to_s
   minutes < 10 ? minutes = minutes.to_s.prepend('0') : minutes = minutes.to_s
-  puts  hours + ":" + minutes
+  puts hours + ':' + minutes
 end
 
 time_of_day(0)
@@ -40,7 +38,6 @@ time_of_day(-1437)
 time_of_day(3000)
 time_of_day(800)
 time_of_day(-4231)
-
 
 # ... LS is so much shorter, of course. Need to store hours and minutes and such as constants, so everything is
 # labeled and there isnt a bunch of random numbers that might not make sense to someone else.
@@ -52,7 +49,7 @@ HOURS_PER_DAY = 24
 MINUTES_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR
 
 def time_of_day(delta_minutes)
-  delta_minutes =  delta_minutes % MINUTES_PER_DAY
+  delta_minutes = delta_minutes % MINUTES_PER_DAY
   hours, minutes = delta_minutes.divmod(MINUTES_PER_HOUR)
   format('%02d:%02d', hours, minutes)
 end

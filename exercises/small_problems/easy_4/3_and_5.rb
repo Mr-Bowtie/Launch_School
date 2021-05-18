@@ -14,11 +14,11 @@
 
 def multisum(range_end)
   multiples = []
-  for i in 1..range_end do
-    multiples << i if i % 3 == 0 || i % 5 ==0
+  for i in 1..range_end
+    multiples << i if i % 3 == 0 || i % 5 == 0
   end
   multiples.reduce(:+)
-end 
+end
 
 puts multisum(10)
 puts multisum(3)

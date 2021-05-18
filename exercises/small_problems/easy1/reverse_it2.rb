@@ -14,23 +14,17 @@
 #said array. if a word is 5 letters or more, reverse it. then join the array
 #together.
 
-def reverse_words(words=" ")
+def reverse_words(words = ' ')
   if words.to_s =~ /\d+/
-    puts "Invalid input: only letters and spaces allowed."
+    puts 'Invalid input: only letters and spaces allowed.'
   else
-    array = words.split.map do |x|
-      if x.length >= 5
-        x.reverse
-      else
-        x
-      end
-    end
-    array.join(" ")
+    array = words.split.map { |x| x.length >= 5 ? x.reverse : x }
+    array.join(' ')
   end
 end
 
 puts reverse_words('Professional')
-puts reverse_words("123")
-puts reverse_words()
+puts reverse_words('123')
+puts reverse_words
 puts reverse_words('what is around the corner')
 puts reverse_words('Launch School')

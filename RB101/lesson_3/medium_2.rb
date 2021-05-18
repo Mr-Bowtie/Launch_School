@@ -21,30 +21,29 @@
 # very intentional based on the methods used inside the method definition?
 
 def not_so_tricky_method(a_string_param, an_array_param)
-  a_string_param += "rutabaga"
-  an_array_param += ["rutabaga"]
+  a_string_param += 'rutabaga'
+  an_array_param += ['rutabaga']
 
   return a_string_param, an_array_param
 end
 
-my_string = "pumpkins"
-my_array = ["pumpkins"]
+my_string = 'pumpkins'
+my_array = ['pumpkins']
 my_string, my_array = not_so_tricky_method(my_string, my_array)
 
 puts "My string looks like this now: #{my_string}"
 puts "My array looks like this now: #{my_array}"
-  
-# so they were looking for the program to be consistent and explicit in its execution and handling of objects. 
+
+# so they were looking for the program to be consistent and explicit in its execution and handling of objects.
 
 #6.
 #  attempt
 def color_valid(color)
-  (color == "blue" || color == "green") ? true : false 
+  (color == 'blue' || color == 'green') ? true : false
 end
 
 #answer
 def color_valid(color)
-color == "blue" || color == "green"
-end 
+  color == 'blue' || color == 'green'
+end
 # this is a boolean expression and will return true or false automatically.
-

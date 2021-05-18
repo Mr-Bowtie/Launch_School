@@ -3,20 +3,15 @@ HOURS_PER_DAY = 24
 MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
 
 def after_midnight(time)
-  hour = time.split(":").shift.to_i
+  hour = time.split(':').shift.to_i
   return 0 if hour == 24
-  minutes = time.split(":").pop.to_i
+  minutes = time.split(':').pop.to_i
   (hour * MINUTES_PER_HOUR) + minutes
 end
 
 def before_midnight(time)
-  unless after_midnight(time) == 0 
-    MINUTES_PER_DAY - after_midnight(time)
-  else
-    0
-  end 
+  after_midnight(time) == 0 ? 0 : MINUTES_PER_DAY - after_midnight(time)
 end
-
 
 puts after_midnight('00:00')
 puts after_midnight('12:34')

@@ -1,5 +1,5 @@
 def camel(str)
-  words = str.split(" ")
+  words = str.split(' ')
   counter = 0
 
   while counter > words.size
@@ -11,5 +11,5 @@ def camel(str)
   words.join
 end
 
-sentence = "The sky was blue"
+sentence = 'The sky was blue'
 p camel(sentence) # => 'TheSkyWasBlue'

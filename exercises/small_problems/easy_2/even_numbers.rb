@@ -6,5 +6,4 @@
 
 #second solution
 
-
-a = (1..99).to_a.select{ |x| puts x if x % 2 == 0}
+a = (1..99).to_a.select { |x| puts x if x % 2 == 0 }

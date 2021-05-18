@@ -13,16 +13,15 @@
 #inject
 
 def running_total(array)
-  total =[]
+  total = []
   array.reduce(0) do |e, i|
     total << e + i
-    e +i
+    e + i
   end
   total
-end 
+end
 
-puts running_total([2,5,13])
+puts running_total([2, 5, 13])
 puts running_total([3])
 puts running_total([])
-puts running_total([14,11,7,15,20])
-
+puts running_total([14, 11, 7, 15, 20])

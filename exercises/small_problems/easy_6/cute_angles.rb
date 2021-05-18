@@ -23,16 +23,16 @@ SECONDS_IN_DEGREE = 3600
 
 def dms(angle)
   angle = angle.to_s
-  if angle.include?(".")
-    degree = angle.split(".").first
-    float = ("." + angle.split(".").last).to_f
+  if angle.include?('.')
+    degree = angle.split('.').first
+    float = ('.' + angle.split('.').last).to_f
     minutes = calculate_minutes(float)
     seconds = calculate_remaining_seconds(float)
     formatted_angle(degree, minutes, seconds)
   else
     degree = angle
-    minutes = "00"
-    seconds = "00"
+    minutes = '00'
+    seconds = '00'
     formatted_angle(degree, minutes, seconds)
   end
 end
@@ -50,14 +50,22 @@ def calculate_remaining_seconds(float)
 end
 
 def formatted_angle(degrees, minutes, seconds)
-  minutes.to_s.length > 1 ? minutes = minutes.to_s : minutes = "0" + minutes.to_s
-  seconds.to_s.length > 1 ? seconds = seconds.to_s : seconds = "0" + seconds.to_s
+  if minutes.to_s.length > 1
+    minutes = minutes.to_s
+  else
+    minutes = '0' + minutes.to_s
+  end
+  if seconds.to_s.length > 1
+    seconds = seconds.to_s
+  else
+    seconds = '0' + seconds.to_s
+  end
   degrees + DEGREE + minutes + "'" + seconds + "\""
 end
 
-puts dms(30) == %(30°00'00")
-puts dms(76.73) == %(76°43'48")
-puts dms(254.6) == %(254°36'00")
-puts dms(93.034773) == %(93°02'05")
-puts dms(0) == %(0°00'00")
-puts dms(360) == %(360°00'00") || dms(360) == %(0°00'00")
+puts dms(30) == "30°00'00\""
+puts dms(76.73) == "76°43'48\""
+puts dms(254.6) == "254°36'00\""
+puts dms(93.034773) == "93°02'05\""
+puts dms(0) == "0°00'00\""
+puts dms(360) == "360°00'00\"" || dms(360) == "0°00'00\""

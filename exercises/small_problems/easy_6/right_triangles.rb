@@ -8,10 +8,10 @@
 
 def triangle(num)
   num.times do |i|
-    line = ""
+    line = ''
     i += 1
-    (num - i).times { line += " " }
-    i.times { line += "*" }
+    (num - i).times { line += ' ' }
+    i.times { line += '*' }
     puts line
   end
 end

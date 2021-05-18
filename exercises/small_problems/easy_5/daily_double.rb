@@ -7,7 +7,7 @@ def crunch(string)
     memo = chr
   end
   string
-end 
+end
 
 puts crunch('dddaaaiiily ddouuubllee')
 puts crunch('555abcabcabc')

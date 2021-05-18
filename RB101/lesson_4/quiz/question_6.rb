@@ -9,8 +9,8 @@ def upper_snake(str)
     words[current_word].upcase!
   end
 
-  words.join("_")
+  words.join('_')
 end
 
-sentence = "The sky was blue"
+sentence = 'The sky was blue'
 p upper_snake(sentence) # => 'THE_SKY_WAS_BLUE'

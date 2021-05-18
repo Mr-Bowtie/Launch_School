@@ -1,13 +1,13 @@
 current_year = Time.now.year
 
 def prompt(message)
-    puts "-> #{message}"
+  puts "-> #{message}"
 end
 
-prompt "How old are you?"
+prompt 'How old are you?'
 age = gets.chomp.to_i
 
-prompt "At what age would you like to retire?"
+prompt 'At what age would you like to retire?'
 retirement_age = gets.chomp.to_i
 
 years_left = retirement_age - age

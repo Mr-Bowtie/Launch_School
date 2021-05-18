@@ -9,8 +9,8 @@ def snake(str)
     break if current_word >= words.size
   end
 
-  words.join("_")
+  words.join('_')
 end
 
-sentence = "The sky was blue"
+sentence = 'The sky was blue'
 p snake(sentence) # => 'the_sky_was_blue'

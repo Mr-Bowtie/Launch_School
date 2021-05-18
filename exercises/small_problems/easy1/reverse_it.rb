@@ -10,7 +10,7 @@
 #C -
 
 def reverse_sentence(words)
-  words.split.reverse.join(" ")
+  words.split.reverse.join(' ')
 end
 
 puts reverse_sentence('Yo, what up dawg') == 'dawg up what Yo,'

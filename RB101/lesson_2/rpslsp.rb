@@ -1,12 +1,14 @@
-require "pry"
-REDO_ANSWERS = ["yes", "y"]
-VALID_CHOICES = ["rock", "paper", "scissors", "lizard", "spock"]
-VALID_ABBREVIATION = ["r", "p", "s", "l", "sp"]
-PLAYS = { "rock" => ["scissors", "lizard"],
-          "paper" => ["rock", "spock"],
-          "scissors" => ["paper", "lizard"],
-          "spock" => ["scissors", "rock"],
-          "lizard" => ["spock", "paper"] }
+require 'pry'
+REDO_ANSWERS = %w[yes y]
+VALID_CHOICES = %w[rock paper scissors lizard spock]
+VALID_ABBREVIATION = %w[r p s l sp]
+PLAYS = {
+  'rock' => %w[scissors lizard],
+  'paper' => %w[rock spock],
+  'scissors' => %w[paper lizard],
+  'spock' => %w[scissors rock],
+  'lizard' => %w[spock paper]
+}
 WINNING_SCORE = 5
 
 def prompt(message)
@@ -14,8 +16,8 @@ def prompt(message)
 end
 
 def display_choices
-  prompt("choose one: #{VALID_CHOICES.join(", ")}")
-  prompt("or: #{VALID_ABBREVIATION.join(", ")}")
+  prompt("choose one: #{VALID_CHOICES.join(', ')}")
+  prompt("or: #{VALID_ABBREVIATION.join(', ')}")
 end
 
 def get_user_input
@@ -26,7 +28,7 @@ def get_user_input
     elsif VALID_ABBREVIATION.include?(choice)
       return convert_user_choice(choice)
     else
-      prompt "Invalid input: refer to choices above"
+      prompt 'Invalid input: refer to choices above'
     end
   end
 end
@@ -37,16 +39,16 @@ end
 
 def convert_user_choice(input)
   case input
-  when "r"
-    input << "ock"
-  when "p"
-    input << "aper"
-  when "s"
-    input << "cissors"
-  when "l"
-    input << "izard"
-  when "sp"
-    input << "pock"
+  when 'r'
+    input << 'ock'
+  when 'p'
+    input << 'aper'
+  when 's'
+    input << 'cissors'
+  when 'l'
+    input << 'izard'
+  when 'sp'
+    input << 'pock'
   end
 end
 
@@ -60,11 +62,11 @@ end
 
 def display_result(player, computer)
   if win?(player, computer)
-    prompt "You Won!"
+    prompt 'You Won!'
   elsif lose?(player, computer)
-    prompt "Computer won!"
+    prompt 'Computer won!'
   else
-    prompt "Tie!"
+    prompt 'Tie!'
   end
 end
 
@@ -77,33 +79,33 @@ def display_score(player, comp)
 end
 
 def redo?
-  redo_message()
+  redo_message
   REDO_ANSWERS.include?(gets.chomp)
 end
 
 def exit_message
-  prompt "Thank you for playing. Goodbye!"
+  prompt 'Thank you for playing. Goodbye!'
 end
 
 def display_match_winner(player_score)
   if player_score == 5
-    prompt "You have won the match"
+    prompt 'You have won the match'
   else
-    prompt "The Computer has won the match"
+    prompt 'The Computer has won the match'
   end
 end
 
 def redo_message
-  prompt "Would you like to play again?"
+  prompt 'Would you like to play again?'
 end
 
 loop do
   player_score = 0
   comp_score = 0
   until player_score == WINNING_SCORE || comp_score == WINNING_SCORE
-    display_choices()
-    choice = get_user_input()
-    system("clear") || system("cls")
+    display_choices
+    choice = get_user_input
+    system('clear') || system('cls')
     computer_choice = VALID_CHOICES.sample
 
     player_score += 1 if win?(choice, computer_choice)
@@ -114,7 +116,7 @@ loop do
     display_score(player_score, comp_score)
   end
   display_match_winner(player_score)
-  break unless redo?()
+  break unless redo?
 end
 
-prompt "Thank you for playing! Good bye"
+prompt 'Thank you for playing! Good bye'

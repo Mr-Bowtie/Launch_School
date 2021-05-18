@@ -9,17 +9,17 @@
 #convert number to string and split out into an array. iterate through
 #returned string to convert elements to integers
 
-def digit_list(num=" ")
+def digit_list(num = ' ')
   if num.to_s.to_i != num || num.negative?
-    puts "Invalid input: positive integers only"
+    puts 'Invalid input: positive integers only'
     return
   end
-  num.to_s.split("").map { |e| e.to_i  }
+  num.to_s.split('').map { |e| e.to_i }
 end
 
 puts digit_list(123)
 puts digit_list(-13)
-puts digit_list("hey")
-puts digit_list(2342342349839)
-puts digit_list()
+puts digit_list('hey')
+puts digit_list(2_342_342_349_839)
+puts digit_list
 puts digit_list(5)

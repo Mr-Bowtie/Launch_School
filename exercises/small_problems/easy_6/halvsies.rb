@@ -10,17 +10,9 @@ def halvsies(arr)
   halved_arr = [[], []]
   arr.each_with_index do |num, index|
     if arr.length.even?
-      if index < (arr.length / 2)
-        halved_arr[0] << num
-      else
-        halved_arr[1] << num
-      end
+      index < (arr.length / 2) ? halved_arr[0] << num : halved_arr[1] << num
     else
-      if index <= (arr.length / 2)
-        halved_arr[0] << num
-      else
-        halved_arr[1] << num
-      end
+      index <= (arr.length / 2) ? halved_arr[0] << num : halved_arr[1] << num
     end
   end
   halved_arr
