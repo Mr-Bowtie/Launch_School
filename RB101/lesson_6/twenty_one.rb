@@ -1,6 +1,9 @@
-require "pry"
-CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6, "7" => 7, "8" => 8, "9" => 9, "10" => 10, "Jack" => 10, "Queen" => 10, "King" => 10, "Ace" => 11 }
+CARD_VALUES = { "2" => 2, "3" => 3, "4" => 4, "5" => 5, "6" => 6,
+                "7" => 7, "8" => 8, "9" => 9, "10" => 10,
+                "Jack" => 10, "Queen" => 10, "King" => 10, "Ace" => 11 }
 TARGET_WINS = 5
+MAX_HAND_VALUE = 21
+MAX_DEALER_HIT = 17
 
 def prompt(input)
   puts "==|: #{input}"
@@ -21,11 +24,48 @@ def initialize_players
   return { player: [], dealer: [] }, { player: 0, dealer: 0 }
 end
 
-def display_hands(hands, totals, state = nil)
-  if state == "final"
+def play_round(deck, hands, hand_sums)
+  players_turn(deck, hands, hand_sums)
+  unless busted?(hand_sums, :player)
+    dealers_turn(deck, hands, hand_sums)
+  end
+end
+
+def hit(deck, hands, hand_sums, player)
+  deal!(deck, hands, player)
+  eval_hand!(hands, player, hand_sums)
+end
+
+def players_turn(deck, hands, hand_sums)
+  loop do
+    display_hands(hands, hand_sums)
+    prompt "(H)it or (S)tay?"
+    action = gets.chomp.downcase
+    case action
+    when "h", "hit"
+      system "clear"
+      hit(deck, hands, hand_sums, :player)
+    when "s", "stay"
+      break
+    else
+      prompt "Invalid input: Either Hit or Stay"
+    end
+    break if busted?(hand_sums, :player)
+  end
+end
+
+def dealers_turn(deck, hands, hand_sums)
+  loop do
+    break if hand_sums[:dealer] >= MAX_DEALER_HIT
+    hit(deck, hands, hand_sums, :dealer)
+  end
+end
+
+def display_hands(hands, hand_sums, state = nil)
+  if state == "result"
     puts "**********************************"
-    prompt "Dealer has: #{hands[:dealer].join(", ")} ==> #{eval_hand!(hands, :dealer, totals)}"
-    prompt "You have: #{hands[:player].join(", ")} ==> #{eval_hand!(hands, :player, totals)}"
+    prompt "Dealer has: #{hands[:dealer].join(", ")} ==> #{eval_hand!(hands, :dealer, hand_sums)}"
+    prompt "You have: #{hands[:player].join(", ")} ==> #{eval_hand!(hands, :player, hand_sums)}"
     puts "**********************************"
   else
     prompt "Dealer has: #{hands[:dealer][0]} and unknown card"
@@ -37,15 +77,15 @@ def deal!(deck, hands, player)
   hands[player] << deck.shift
 end
 
-def eval_hand!(hands, player, totals)
+def eval_hand!(hands, player, hand_sums)
   number_of_aces = hands[player].count("Ace")
   sum = hands[player].map { |card| CARD_VALUES[card] }.sum
-  number_of_aces.times { sum -= 10 if (sum > 21) }
-  totals[player] = sum
+  number_of_aces.times { sum -= 10 if sum > 21 }
+  hand_sums[player] = sum
 end
 
-def busted?(totals, player)
-  totals[player] > 21
+def busted?(hand_sums, player)
+  hand_sums[player] > 21
 end
 
 def play_again?
@@ -63,20 +103,20 @@ def play_again?
   end
 end
 
-def calc_result(totals)
-  if busted?(totals, :player)
+def calc_result(hand_sums)
+  if busted?(hand_sums, :player)
     :player_busted
-  elsif busted?(totals, :dealer)
+  elsif busted?(hand_sums, :dealer)
     :dealer_busted
-  elsif totals[:player] > totals[:dealer]
+  elsif hand_sums[:player] > hand_sums[:dealer]
     :player
-  elsif totals[:dealer] > totals[:player]
+  elsif hand_sums[:dealer] > hand_sums[:player]
     :dealer
   end
 end
 
-def display_result(totals)
-  case calc_result(totals)
+def display_result(hand_sums)
+  case calc_result(hand_sums)
   when :player_busted
     prompt "You busted, dealer wins"
   when :dealer_busted
@@ -90,14 +130,18 @@ def display_result(totals)
   end
 end
 
-def display_grand_output(hands, totals)
+def display_round(hands, hand_sums, scores)
   system "clear"
-  display_hands(hands, totals, "final")
-  display_result(totals)
+  display_hands(hands, hand_sums, "result")
+  display_result(hand_sums)
+  display_score(scores)
+  return if match_winner?(scores)
+  puts "press enter to play next hand"
+  gets.chomp
 end
 
-def update_hands_won(totals, hands_won)
-  case calc_result(totals)
+def update_hands_won(hand_sums, hands_won)
+  case calc_result(hand_sums)
   when :dealer_busted, :player
     hands_won[:player] += 1
   when :player_busted, :dealer
@@ -105,74 +149,60 @@ def update_hands_won(totals, hands_won)
   end
 end
 
-def grand_winner(hands_won)
-  hands_won[:player] == TARGET_WINS ? :player : dealer
+def setup_hands(deck, hands, hand_sums)
+  2.times do
+    deal!(deck, hands, :player)
+    deal!(deck, hands, :dealer)
+  end
+  eval_hand!(hands, :player, hand_sums)
+  eval_hand!(hands, :dealer, hand_sums)
 end
 
-def target_reached(hands_won)
-  hands_won.values.include?(5)
+def display_score(scores)
+  puts "--------------------------------"
+  puts "SCORE: Player => #{scores[:player]}, Dealer => #{scores[:dealer]}"
+  puts "--------------------------------"
 end
 
-# TODO add in friendly messages and clear directions
+def display_match(scores)
+  puts ""
+  puts "~*~*~*~*~*~*~*~*~"
+  puts "#{calc_winner(scores)} wins the match!"
+  puts "~*~*~*~*~*~*~*~*~"
+end
+
+def match_winner?(scores)
+  scores.values.include?(TARGET_WINS)
+end
+
+def calc_winner(scores)
+  scores[:player] == TARGET_WINS ? "Player" : "Dealer"
+end
+
+def display_welcome
+  system "clear"
+  prompt "Welcome to 21"
+  prompt "The goal is to get your hand as close to 21 without going over"
+  prompt "The higher score wins the round"
+  prompt "First to 5 rounds wins the match"
+  puts ""
+  prompt "press enter to begin"
+  gets
+end
 
 loop do
   hands_won = { player: 0, dealer: 0 }
-  loop do
-    hands, totals = initialize_players
+  display_welcome()
+  until match_winner?(hands_won)
     deck = initialize_deck
+    hands, hand_sums = initialize_players
     system "clear"
-    2.times do
-      deal!(deck, hands, :player)
-      deal!(deck, hands, :dealer)
-    end
-    eval_hand!(hands, :player, totals)
-    eval_hand!(hands, :dealer, totals)
-
-    # * Players turn
-
-    loop do
-      display_hands(hands, totals)
-      puts ""
-      prompt "(H)it or (S)tay?"
-      action = gets.chomp.downcase
-      if %(hit, h).include?(action)
-        system "clear"
-        deal!(deck, hands, :player)
-        eval_hand!(hands, :player, totals)
-      elsif !%(hit, stay, h, s).include?(action)
-        prompt "Invalid input: Either Hit or Stay"
-        next
-      end
-      break if %(stay, s).include?(action) || busted?(totals, :player)
-    end
-
-    if busted?(totals, :player)
-      display_grand_output(hands, totals)
-      next
-    end
-
-    # * Dealers turn
-
-    loop do
-      break if totals[:dealer] >= 17
-      deal!(deck, hands, :dealer)
-      eval_hand!(hands, :dealer, totals)
-    end
-
-    if busted?(totals, :dealer)
-      display_grand_output(hands, totals)
-      next
-    end
-    #TODO make grand output for ultimate winner, make round output for round winners
-    display_grand_output(hands, totals)
-    update_hands_won(totals, hands_won)
-    #TODO add enter break for next round
-    sleep(2)
-    break if target_reached(hands_won)
+    setup_hands(deck, hands, hand_sums)
+    play_round(deck, hands, hand_sums)
+    update_hands_won(hand_sums, hands_won)
+    display_round(hands, hand_sums, hands_won)
   end
-  #TODO finish round scoring implementation
-
+  display_match(hands_won)
   break unless play_again?()
 end
 prompt "Thanks for playing 21, Goodbye!"
-# ? maybe add a betting/scoring system tracked from round to round
