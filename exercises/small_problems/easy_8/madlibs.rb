@@ -18,16 +18,20 @@
 #   3. capture user responses
 #   4. display new string with user responses interpolated in
 
-user_responses = {}
+def prompt(key)
+  if key.to_s[0].match?(/[aeiou]/)
+    print "Enter an #{key.to_s}: "
+  else
+    print "Enter a #{key.to_s}: "
+  end
+end
 
-print "Enter a noun: "
-user_responses[:noun] = gets.chomp
-print "Enter a verb: "
-user_responses[:verb] = gets.chomp
-print "Enter an adjective: "
-user_responses[:adjective] = gets.chomp
-print "Enter an adverb: "
-user_responses[:adverb] = gets.chomp
+user_responses = { noun: "", verb: "", adjective: "", adverb: "" }
+
+user_responses.each do |k, v|
+  prompt(k)
+  user_responses[k] = gets.chomp
+end
 
 final_sentence = "As I #{user_responses[:verb]} #{user_responses[:adverb]} up the \
 #{user_responses[:noun]}, I feel positively #{user_responses[:adjective]}"
