@@ -16,8 +16,12 @@ require 'pry'
 STAR = '*'
 
 def display_line(star_count, space_count)
-half_spaces = space_count / 2
-puts (" " * half_spaces) + (STAR * star_count) + (" " * half_spaces)
+  half_spaces = space_count / 2
+  if star_count == 1 
+    puts STAR.center(space_count + 1)
+  else 
+    puts (" " * half_spaces) + STAR + (" " * (star_count - 2)) + STAR + (" " * half_spaces)
+  end 
 end 
 
 def diamond(grid_size)
